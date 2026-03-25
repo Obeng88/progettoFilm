@@ -4,16 +4,7 @@ from typing import List, Optional,Dict
 import requests
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-
-
-class Film(BaseModel):
-    Id:str
-    Titolo: str
-    Durata: int
-    Genere: str
-    Regista: str
-    Immagine:Optional[str]=""
-
+from classi.MovieClasses import Film
 
 app=FastAPI()
 
