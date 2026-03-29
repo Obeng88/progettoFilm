@@ -4,10 +4,13 @@ from typing import List, Optional,Dict
 import requests
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from classi.MovieClasses import Film
+import classi.MovieClasses as MovieClasses
+import sqlite3
+
 
 app=FastAPI()
 
+'''Configurazione CORS per permettere al frontend di comunicare con il backend'''
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://127.0.0.1:8000"],  # in produzione metti il tuo dominio
@@ -15,159 +18,103 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+'''Funzioni per interagire con il database'''
+def connect_db():
+    conn=sqlite3.connect("moviedb.sqlite")
+    conn.row_factory=sqlite3.Row
+    cursor=conn.cursor()
 
+def get_films_db():
+    conn=sqlite3.connect("moviedb.sqlite")
+    cursor=conn.cursor()
+    cursor.execute("SELECT * FROM film")
+    films=cursor.fetchall()
+    conn.close()
+    return films
+
+def get_film_by_genre(genre:str):
+    conn=sqlite3.connect("moviedb.sqlite")
+    cursor=conn.cursor()
+    cursor.execute("SELECT * FROM film WHERE Genere=?", (genre.capitalize(),))
+    films=cursor.fetchall()
+    conn.close()
+    return films
+
+def get_film_by_id(id:int):
+    conn=sqlite3.connect("moviedb.sqlite")
+    cursor=conn.cursor()
+    cursor.execute("SELECT * FROM film WHERE Id=?", (id,))
+    film=cursor.fetchone()
+    conn.close()
+    return film
+
+def get_film_by_director(director:str):
+    conn=sqlite3.connect("moviedb.sqlite")
+    cursor=conn.cursor()
+    cursor.execute("SELECT * FROM film WHERE Regista LIKE ?", (director,))
+    films=cursor.fetchall()
+    conn.close()
+    return films
+
+def get_all_genres():
+    conn=sqlite3.connect("moviedb.sqlite")
+    cursor=conn.cursor()
+    cursor.execute("SELECT DISTINCT Genere FROM film")
+    genres=cursor.fetchall()
+    conn.close()
+    return [genre[0] for genre in genres]
+
+
+'''Funzione per convertire i risultati del database in un dizionario'''
+def to_dict(films):
+    film_dict={}
+    for film in films:
+        film_dict[film[0]]={
+            "Titolo": film[1],
+            "Durata": film[2],
+            "Genere": film[3],
+            "Regista": film[4],
+            "Immagine": film[5],
+            "Descrizione": film[6]
+        }
+    return film_dict
+
+'''Endpoint per servire l'index.html''' 
 @app.get("/")
 async def root():
     return FileResponse("index.html")
 
-
-
-fake_db: Dict[str, Film]={
-    "UUID1": Film(Titolo="Io sono leggenda", Durata=101, Genere="Azione", Regista="Francis Lawrence"),
-    "UUID2": Film(Titolo="The Godfather", Durata=175, Genere="Crime", Regista="Francis Ford Coppola"),
-    "UUID3": Film(Titolo="Pulp Fiction", Durata=154, Genere="Crime", Regista="Quentin Tarantino"),
-    "UUID4": Film(Titolo="Titanic", Durata=195, Genere="Romantico", Regista="James Cameron"),
-    "UUID5": Film(Titolo="The Dark Knight", Durata=152, Genere="Azione", Regista="Christopher Nolan"),
-    "UUID6": Film(Titolo="The Shawshank Redemption", Durata=142, Genere="Drammatico", Regista="Frank Darabont"),
-    "UUID7": Film(Titolo="Fight Club", Durata=139, Genere="Thriller", Regista="David Fincher"),
-    "UUID8": Film(Titolo="Forrest Gump", Durata=142, Genere="Drammatico", Regista="Robert Zemeckis"),
-    "UUID9": Film(Titolo="Interstellar", Durata=169, Genere="Fantascienza", Regista="Christopher Nolan"),
-    "UUID10": Film(Titolo="Gladiator", Durata=155, Genere="Storico", Regista="Ridley Scott"),
-    "UUID11": Film(Titolo="Se7en", Durata=127, Genere="Thriller", Regista="David Fincher"),
-    "UUID12": Film(Titolo="Shrek", Durata=89, Genere="Commedia", Regista="Vicky Jenson"),
-    "UUID13": Film(Titolo="The Mask:da zero a mito", Durata=97, Genere="Commedia", Regista="Chuck Russell")
-}
-
-fake_db={
-    "UUID1":{
-        "Titolo":"Io sono leggenda",
-        "Durata":101,
-        "Genere":"Azione",
-        "Regista":"Francis Lawrence"
-    },
-    "UUID2": {
-        "Titolo": "The Godfather",
-        "Durata": 175,
-        "Genere":"Crime",
-        "Regista": "Francis Ford Coppola"
-    },
-    "UUID3": {
-        "Titolo": "Pulp Fiction",
-        "Durata": 154,
-        "Genere":"Crime",
-        "Regista": "Quentin Tarantino"
-    },
-    "UUID4": {
-        "Titolo": "Titanic",
-        "Durata": 195,
-        "Genere": "Romantico",
-        "Regista": "James Cameron"
-    },
-    "UUID5": {
-        "Titolo": "The Dark Knight",
-        "Durata": 152,
-        "Genere": "Azione",
-        "Regista": "Christopher Nolan"
-    },
-    "UUID6": {
-        "Titolo": "The Shawshank Redemption",
-        "Durata": 142,
-        "Genere": "Drammatico",
-        "Regista": "Frank Darabont"
-    },
-    "UUID7": {
-        "Titolo": "Fight Club",
-        "Durata": 139,
-        "Genere": "Thriller",
-        "Regista": "David Fincher"
-    },
-    "UUID8": {
-        "Titolo": "Forrest Gump",
-        "Durata": 142,
-        "Genere": "Drammatico",
-        "Regista": "Robert Zemeckis"
-    },
-    "UUID9": {
-        "Titolo": "Interstellar",
-        "Durata": 169,
-        "Genere": "Fantascienza",
-        "Regista": "Christopher Nolan"
-    },
-    "UUID10": {
-        "Titolo": "Gladiator",
-        "Durata": 155,
-        "Genere": "Storico",
-        "Regista": "Ridley Scott"
-    },
-    "UUID11":{
-        "Titolo": "Se7en",
-        "Durata": 127,
-        "Genere": "Thriller",
-        "Regista": "David Fincher"
-    },
-    "UUID12":{
-        "Titolo": "Shrek",
-        "Durata": 89,
-        "Genere": "Commedia",
-        "Regista": "Vicky Jenson"
-    },
-    "UUID13":{
-        "Titolo": "The Mask:da zero a mito",
-        "Durata": 97,
-        "Genere": "Commedia",
-        "Regista": "Chuck Russell"
-    }
-
-}
-
+'''Endpoint per ottenere tutti i film'''
 @app.get("/films")
 async def get_all_movies():
-    return fake_db
+    return to_dict(get_films_db())
 
+'''Endpoint per ottenere i film di un genere specifico'''
 @app.get("/film/genre/{genre}")
 async def get_all_movies_genre(genre:str):
-    temp=fake_db.copy()
-    for filmK in list(temp.keys()):
-        if temp[filmK]["Genere"].lower()!=genre:
-            temp.pop(filmK)
-    
-    if len(temp)==0:
+    films=get_film_by_genre(genre)
+    if len(films)==0:
         raise HTTPException(status_code=404, detail="Nessun film trovato per questo genere")
+    return to_dict(films)
 
-    return temp        
-
-
+'''Endpoint per ottenere i dettagli di un film specifico'''
 @app.get("/film/{id}")
-async def get_movie(id:str):
-    if id.upper() not in fake_db:
+async def get_movie(id: int):
+    film=get_film_by_id(id)
+    if not film:
         raise HTTPException(status_code=404, detail="Film non trovato")
-    return fake_db[id.upper()]
+    return to_dict([film])
 
-
+'''Endpoint per ottenere i film di un regista specifico'''
 @app.get("/films/director/{director}")
 async def get_director_films(director:str):
     d=director.replace("-", " ")
-    temp=fake_db.copy()
-    for filmK in list(temp.keys()):
-        if temp[filmK]["Regista"].lower()!=d.lower():
-            temp.pop(filmK)
-    
-    if len(temp)==0:
+    films=get_film_by_director(d)
+    if len(films)==0:
         raise HTTPException(status_code=404, detail="Nessun regista trovato.")
+    return to_dict(films)
 
-    return temp
-
+'''Endpoint per ottenere tutti i generi disponibili'''
 @app.get("/films/genres")
 async def get_unique_genres():
-
-    temp=fake_db.copy()
-    generi=[]
-    duplicates=[]                                                         
-    dbkeys=list(temp.keys())
-    for k in dbkeys:
-        duplicates.append(temp[k]["Genere"])
-    for key in dbkeys:
-        if temp[key]["Genere"] not in generi:
-            generi.append(temp[key]["Genere"])
-
-    return generi
+    return get_all_genres()
