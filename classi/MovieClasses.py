@@ -15,22 +15,24 @@ class Film(BaseModel):
 
 
 class Sala(BaseModel):
-    Id:str=Field(...,min_length=1)      
+    Id:int=Field(...,ge=0)      
     PostiTotali: int=Field(...,gt=0)
     PostiDisponibili: int=Field(...,ge=0)
 
 
 class Spettacolo(BaseModel):
-    Id:str=Field(...,min_length=1)
-    Film: Film
-    Sala: Sala
-    Orario: datetime=Field(...)
+    Id:int=Field(...,ge=0)
+    Film: int=Field(...,ge=0)
+    Sala: int=Field(...,ge=0)
+    Orario: str=Field(...)
 
 
-class posto(BaseModel):
+
+class Posto(BaseModel):
     Fila: str=Field(...,min_length=1)
     numeroPosto: int=Field(...,gt=0)
-    Sala: Sala
+    Sala: int=Field(...,ge=0)
+    stato:int=Field(...,ge=0,le=1) # 0 libero, 1 occupato
 
 
 

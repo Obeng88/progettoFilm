@@ -1,169 +1,84 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse, FileResponse
-from typing import List, Optional
-import requests
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import sqlite3
+import uvicorn
 
-
-class Film(BaseModel):
-    Titolo: str
-    Durata: int
-    Genere: str
-    Regista: str
-    Immagine:Optional[str]=""
-
-
-app=FastAPI()
+app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:8000"],  # in produzione metti il tuo dominio
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+class Prenotazione(BaseModel):
+    film_id: int
+    utente_nome: str
+    posto: str
 
 @app.get("/")
 async def root():
     return FileResponse("index.html")
 
-
-
-fake_db2={
+@app.get("/api/films")
+async def get_films():
+    conn = sqlite3.connect("moviedb.sqlite")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM film")
+    rows = cursor.fetchall()
+    conn.close()
     
-}
+    films = []
+    for r in rows:
+        films.append({
+            "id": r["Id"],
+            "titolo": r["Titolo"],
+            "voto": r["Voto"],
+            "trama": r["Trama"],
+            "sala": r["Sala"],
+            "orari": r["Orari"].split(",") if r["Orari"] else [],
+            "img": r["Immagine"]
+        })
+    return films
 
-fake_db={
-    "UUID1":{
-        "Titolo":"Io sono leggenda",
-        "Durata":101,
-        "Genere":"Azione",
-        "Regista":"Francis Lawrence"
-    },
-    "UUID2": {
-        "Titolo": "The Godfather",
-        "Durata": 175,
-        "Genere":"Crime",
-        "Regista": "Francis Ford Coppola"
-    },
-    "UUID3": {
-        "Titolo": "Pulp Fiction",
-        "Durata": 154,
-        "Genere":"Crime",
-        "Regista": "Quentin Tarantino"
-    },
-    "UUID4": {
-        "Titolo": "Titanic",
-        "Durata": 195,
-        "Genere": "Romantico",
-        "Regista": "James Cameron"
-    },
-    "UUID5": {
-        "Titolo": "The Dark Knight",
-        "Durata": 152,
-        "Genere": "Azione",
-        "Regista": "Christopher Nolan"
-    },
-    "UUID6": {
-        "Titolo": "The Shawshank Redemption",
-        "Durata": 142,
-        "Genere": "Drammatico",
-        "Regista": "Frank Darabont"
-    },
-    "UUID7": {
-        "Titolo": "Fight Club",
-        "Durata": 139,
-        "Genere": "Thriller",
-        "Regista": "David Fincher"
-    },
-    "UUID8": {
-        "Titolo": "Forrest Gump",
-        "Durata": 142,
-        "Genere": "Drammatico",
-        "Regista": "Robert Zemeckis"
-    },
-    "UUID9": {
-        "Titolo": "Interstellar",
-        "Durata": 169,
-        "Genere": "Fantascienza",
-        "Regista": "Christopher Nolan"
-    },
-    "UUID10": {
-        "Titolo": "Gladiator",
-        "Durata": 155,
-        "Genere": "Storico",
-        "Regista": "Ridley Scott"
-    },
-    "UUID11":{
-        "Titolo": "Se7en",
-        "Durata": 127,
-        "Genere": "Thriller",
-        "Regista": "David Fincher"
-    },
-    "UUID12":{
-        "Titolo": "Shrek",
-        "Durata": 89,
-        "Genere": "Commedia",
-        "Regista": "Vicky Jenson"
-    },
-    "UUID13":{
-        "Titolo": "The Mask:da zero a mito",
-        "Durata": 97,
-        "Genere": "Commedia",
-        "Regista": "Chuck Russell"
-    }
+@app.get("/api/posti-occupati/{film_id}")
+async def get_posti(film_id: int):
+    conn = sqlite3.connect("moviedb.sqlite")
+    cursor = conn.cursor()
+    cursor.execute("SELECT posto FROM prenotazioni WHERE film_id=?", (film_id,))
+    posti = [r[0] for r in cursor.fetchall()]
+    conn.close()
+    return {"occupati": posti}
 
-}
-
-@app.get("/films")
-async def get_all_movies():
-    return fake_db
-
-@app.get("/film/genre/{genre}")
-async def get_all_movies_genre(genre:str):
-    temp=fake_db.copy()
-    for filmK in list(temp.keys()):
-        if temp[filmK]["Genere"].lower()!=genre:
-            temp.pop(filmK)
+@app.post("/api/prenota")
+async def prenota(dati: Prenotazione):
+    conn = sqlite3.connect("moviedb.sqlite")
+    cursor = conn.cursor()
     
-    if len(temp)==0:
-        raise HTTPException(status_code=404, detail="Nessun film trovato per questo genere")
-
-    return temp        
-
-
-@app.get("/film/{id}")
-async def get_movie(id:str):
-    if id.upper() not in fake_db:
-        raise HTTPException(status_code=404, detail="Film non trovato")
-    return fake_db[id.upper()]
-
-
-@app.get("/films/director/{director}")
-async def get_director_films(director:str):
-    d=director.replace("-", " ")
-    temp=fake_db.copy()
-    for filmK in list(temp.keys()):
-        if temp[filmK]["Regista"].lower()!=d.lower():
-            temp.pop(filmK)
+    # CONTROLLO DI SICUREZZA: Verifica se il posto è già stato preso
+    cursor.execute("SELECT id FROM prenotazioni WHERE film_id=? AND posto=?", 
+                   (dati.film_id, dati.posto))
+    già_prenotato = cursor.fetchone()
     
-    if len(temp)==0:
-        raise HTTPException(status_code=404, detail="Nessun regista trovato.")
+    if già_prenotato:
+        conn.close()
+        # Se il posto esiste già, restituiamo un errore 400
+        raise HTTPException(status_code=400, detail="Spiacenti, questo posto è già stato occupato!")
 
-    return temp
+    # Se il posto è libero, procediamo con l'inserimento
+    try:
+        cursor.execute("INSERT INTO prenotazioni (film_id, utente_nome, posto) VALUES (?, ?, ?)",
+                       (dati.film_id, dati.utente_nome, dati.posto))
+        conn.commit()
+        conn.close()
+        return {"status": "OK"}
+    except Exception as e:
+        conn.close()
+        raise HTTPException(status_code=500, detail=f"Errore del database: {str(e)}")
 
-@app.get("/films/genres")
-async def get_unique_genres():
-
-    temp=fake_db.copy()
-    generi=[]
-    duplicates=[]                                                         
-    dbkeys=list(temp.keys())
-    for k in dbkeys:
-        duplicates.append(temp[k]["Genere"])
-    for key in dbkeys:
-        if temp[key]["Genere"] not in generi:
-            generi.append(temp[key]["Genere"])
-
-    return generi
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
