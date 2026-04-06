@@ -4,9 +4,11 @@ from typing import List, Optional,Dict
 import requests
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from classi.MovieClasses import Posto,Spettacolo,Sala
+from classi.MovieClasses import Posto,Spettacolo,Sala,User
 import sqlite3
 from fastapi.params import Body
+import bcrypt
+
 
 
 app=FastAPI()
@@ -172,11 +174,19 @@ def block_seat(posto: Posto):
     conn.close()
 
 '''Funzione per aggiungere una prenotazione al database'''
-def add_prenotazione(spettacolo_id:int, special_code:str, costo_totale:int, numero_posti:int, posti:str):
+def add_prenotazione(spettacolo_id:int, special_code:str, costo_totale:int, numero_posti:int, posti:str,user:str):
     conn=sqlite3.connect("moviedb.sqlite")
     cursor=conn.cursor()
-    cursor.execute("INSERT INTO prenota (SpettacoloId, SpecialCode, costoTotale, numeroPostiPrenotati, Posti) VALUES (?, ?, ?, ?, ?)", 
-                   (spettacolo_id, special_code, costo_totale, numero_posti, posti))
+    cursor.execute("SELECT id FROM user WHERE username=?", (user,))
+    user_t=cursor.fetchone()
+    
+    if user_t==None:
+            cursor.execute("INSERT INTO prenota (SpettacoloId, SpecialCode, costoTotale, numeroPostiPrenotati, Posti, User) VALUES (?, ?, ?, ?, ?, ?)", 
+                       (spettacolo_id, special_code, costo_totale, numero_posti, posti, int(user)))
+    else:
+        user_id_list=list(user_t)
+        cursor.execute("INSERT INTO prenota (SpettacoloId, SpecialCode, costoTotale, numeroPostiPrenotati, Posti, User) VALUES (?, ?, ?, ?, ?, ?)", 
+                       (spettacolo_id, special_code, costo_totale, numero_posti, posti, user_id_list[0]))
     conn.commit()
     conn.close()
 
@@ -259,8 +269,39 @@ async def prenota(prenotazione: dict = Body(...)):
             raise HTTPException(status_code=404, detail=f"Il posto {posto.Fila}{posto.numeroPosto} non esiste nella sala {prenotazione['salaId']}")
         else:
             block_seat(p)
-
-    update_watchroom_seats(sala.Id, postiRimanenti)
-    add_prenotazione(prenotazione["SpettacoloId"], prenotazione["SpecialCode"], prenotazione["costoTotale"], prenotazione["numeroPostiPrenotati"],prenotazione["Posti"])
+    
+    add_prenotazione(prenotazione["SpettacoloId"], prenotazione["SpecialCode"], prenotazione["costoTotale"], prenotazione["numeroPostiPrenotati"],prenotazione["Posti"],prenotazione["User"])
 
     return {"message": "Prenotazione effettuata con successo!"}
+
+'''Endpoint per registrare un nuovo utente'''
+@app.post("/register")
+async def register(user: dict = Body(...)):
+    conn=sqlite3.connect("moviedb.sqlite")
+    cursor=conn.cursor()
+    cursor.execute("SELECT * FROM user WHERE username=?", (user["username"],))
+    existing_user=cursor.fetchone()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Username già esistente")
+    
+    hashed_password=bcrypt.hashpw(user["password"].encode('utf-8'), bcrypt.gensalt())
+    cursor.execute("INSERT INTO user (username, password) VALUES (?, ?)", (user["username"], hashed_password))
+    conn.commit()
+    conn.close()
+    return {"message": "Registrazione avvenuta con successo!"}
+
+'''Endpoint per effettuare il login di un utente'''
+@app.post("/login")
+async def login(user: dict = Body(...)):
+    conn=sqlite3.connect("moviedb.sqlite")
+    cursor=conn.cursor()
+    cursor.execute("SELECT * FROM user WHERE username=?", (user["username"],))
+    existing_user=cursor.fetchone()
+    if not existing_user:
+        raise HTTPException(status_code=400, detail="Username non trovato")
+    
+    stored_hashed_password=existing_user[2]
+    if bcrypt.checkpw(user["password"].encode("utf-8"), stored_hashed_password):
+        return {"message": "Login avvenuto con successo!"}
+    else:
+        raise HTTPException(status_code=400, detail="Password errata")

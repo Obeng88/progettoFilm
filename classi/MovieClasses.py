@@ -27,7 +27,6 @@ class Spettacolo(BaseModel):
     Orario: str=Field(...)
 
 
-
 class Posto(BaseModel):
     Fila: str=Field(...,min_length=1)
     numeroPosto: int=Field(...,gt=0)

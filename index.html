@@ -19,13 +19,19 @@
     body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden}
     body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:.5}
 
-    /* HEADER */
+    /* ── HEADER ── */
     header{position:sticky;top:0;z-index:100;background:rgba(10,10,11,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 clamp(1.5rem,5vw,4rem);display:flex;align-items:center;justify-content:space-between;height:64px}
     .logo{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--gold);display:flex;align-items:center;gap:.5rem;cursor:pointer}
     .logo span{color:var(--text-dim);font-weight:400;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;margin-top:2px}
-    .header-meta{font-size:.7rem;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase}
+    .header-right{display:flex;align-items:center;gap:.75rem}
+    .user-chip{display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--text-mid);padding:.35rem .75rem;border:1px solid var(--border);border-radius:var(--radius)}
+    .user-chip .dot{width:6px;height:6px;background:var(--green);border-radius:50%}
+    .btn-header{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'DM Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:.35rem .85rem;cursor:pointer;border-radius:var(--radius);transition:all .15s}
+    .btn-header:hover{border-color:var(--gold);color:var(--gold)}
+    .btn-header.gold{background:var(--gold);border-color:var(--gold);color:#0a0a0b;font-weight:500}
+    .btn-header.gold:hover{background:#e0bc60}
 
-    /* HERO */
+    /* ── HERO ── */
     .hero{padding:clamp(3rem,8vw,6rem) clamp(1.5rem,5vw,4rem);display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:end;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
     .hero::after{content:'CINEVAULT';position:absolute;right:-1rem;bottom:-2rem;font-family:'Playfair Display',serif;font-size:clamp(6rem,18vw,14rem);font-weight:900;color:transparent;-webkit-text-stroke:1px rgba(201,168,76,.06);pointer-events:none;line-height:1;user-select:none}
     .hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;line-height:1.05;letter-spacing:-.03em}
@@ -35,20 +41,21 @@
     .hero-stat-num{font-family:'Playfair Display',serif;font-size:3rem;font-weight:700;color:var(--gold);line-height:1}
     .hero-stat-label{font-size:.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.15em;margin-top:.25rem}
 
-    /* CONTROLS */
+    /* ── CONTROLS ── */
     .controls{padding:1.5rem clamp(1.5rem,5vw,4rem);display:flex;gap:1rem;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--border);background:var(--surface)}
     .search-wrap{flex:1;min-width:220px;position:relative}
     .search-wrap::before{content:'⌕';position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:1.1rem;pointer-events:none}
-    input[type="text"]{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:.8rem;padding:.65rem 1rem .65rem 2.5rem;outline:none;border-radius:var(--radius);transition:border-color .2s}
-    input[type="text"]:focus{border-color:var(--gold)}
-    input[type="text"]::placeholder{color:var(--text-dim)}
+    input[type="text"],input[type="password"]{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:.8rem;padding:.65rem 1rem;outline:none;border-radius:var(--radius);transition:border-color .2s}
+    .search-wrap input{padding-left:2.5rem}
+    input:focus{border-color:var(--gold)}
+    input::placeholder{color:var(--text-dim)}
     .genre-filters{display:flex;gap:.4rem;flex-wrap:wrap}
     .genre-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:.4rem .85rem;cursor:pointer;border-radius:var(--radius);transition:all .18s;white-space:nowrap}
     .genre-btn:hover{border-color:var(--gold);color:var(--gold)}
     .genre-btn.active{background:var(--gold);border-color:var(--gold);color:#0a0a0b;font-weight:500}
     select{background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:.75rem;padding:.65rem 1rem;outline:none;cursor:pointer;border-radius:var(--radius)}
 
-    /* RESULTS BAR */
+    /* ── RESULTS BAR ── */
     .results-bar{padding:.75rem clamp(1.5rem,5vw,4rem);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
     .results-count{font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.12em}
     .results-count strong{color:var(--gold)}
@@ -56,11 +63,9 @@
     .view-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-size:.8rem;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:var(--radius);transition:all .15s}
     .view-btn.active{border-color:var(--gold);color:var(--gold)}
 
-    /* CATALOG */
+    /* ── CATALOG ── */
     .catalog{padding:clamp(1.5rem,4vw,3rem) clamp(1.5rem,5vw,4rem);display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5px}
     .catalog.list-view{grid-template-columns:1fr;gap:1px}
-
-    /* CARD */
     .card{background:var(--surface);border:1px solid var(--border);cursor:pointer;position:relative;overflow:hidden;transition:all .22s cubic-bezier(.25,.46,.45,.94);animation:fadeUp .4s ease both;display:flex;flex-direction:column}
     .card-poster{width:100%;height:180px;object-fit:cover;display:block;filter:brightness(.85);transition:filter .3s}
     .card-poster-placeholder{width:100%;height:180px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--text-dim)}
@@ -78,9 +83,7 @@
     .badge-genre{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(201,168,76,.2)}
     .card-duration{font-size:.68rem;color:var(--text-dim);display:flex;align-items:center;gap:.35rem}
     .card-duration::before{content:'';width:3px;height:3px;background:var(--gold);border-radius:50%;display:inline-block}
-    /* cinema badge on card */
     .badge-cinema{position:absolute;top:.75rem;right:.75rem;background:var(--green);color:#fff;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .5rem;border-radius:2px;font-family:'DM Mono',monospace}
-
     .list-view .card{flex-direction:row}
     .list-view .card-poster{width:100px;height:auto;min-height:100px;flex-shrink:0}
     .list-view .card-poster-placeholder{width:100px;min-height:100px;height:auto}
@@ -90,7 +93,32 @@
     @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* MODAL FILM */
+    /* ── AUTH MODAL ── */
+    .auth-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);z-index:400;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .25s}
+    .auth-backdrop.open{opacity:1;pointer-events:all}
+    .auth-modal{background:var(--surface2);border:1px solid rgba(201,168,76,.2);max-width:400px;width:100%;position:relative;transform:translateY(20px) scale(.97);transition:transform .25s cubic-bezier(.34,1.56,.64,1);overflow:hidden}
+    .auth-backdrop.open .auth-modal{transform:translateY(0) scale(1)}
+    .auth-accent{height:3px;background:linear-gradient(90deg,var(--gold),transparent)}
+    .auth-body{padding:2rem}
+    .auth-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;margin-bottom:.25rem}
+    .auth-sub{font-size:.72rem;color:var(--text-dim);margin-bottom:1.5rem}
+    .auth-tabs{display:flex;gap:0;margin-bottom:1.5rem;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+    .auth-tab{flex:1;background:transparent;border:none;color:var(--text-dim);font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:.6rem;cursor:pointer;transition:all .15s}
+    .auth-tab.active{background:var(--gold);color:#0a0a0b;font-weight:500}
+    .form-group{margin-bottom:1rem}
+    .form-label{font-size:.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.4rem;display:block}
+    .form-error{font-size:.68rem;color:var(--red);margin-top:.75rem;min-height:1rem}
+    .btn-auth{width:100%;padding:.85rem;background:var(--gold);border:none;color:#0a0a0b;font-family:'DM Mono',monospace;font-size:.8rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius);transition:all .18s;margin-top:.5rem}
+    .btn-auth:hover{background:#e0bc60}
+    .auth-divider{text-align:center;font-size:.68rem;color:var(--text-dim);margin:1rem 0;position:relative}
+    .auth-divider::before,.auth-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
+    .auth-divider::before{left:0}.auth-divider::after{right:0}
+    .btn-guest{width:100%;padding:.7rem;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'DM Mono',monospace;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius);transition:all .15s}
+    .btn-guest:hover{border-color:var(--gold);color:var(--gold)}
+    .auth-close{position:absolute;top:.75rem;right:.75rem;background:transparent;border:1px solid var(--border);color:var(--text-dim);width:28px;height:28px;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:2px;transition:all .15s}
+    .auth-close:hover{border-color:var(--gold);color:var(--gold)}
+
+    /* ── FILM MODAL ── */
     .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .25s}
     .modal-backdrop.open{opacity:1;pointer-events:all}
     .modal{background:var(--surface2);border:1px solid rgba(201,168,76,.2);max-width:620px;width:100%;position:relative;transform:translateY(20px) scale(.97);transition:transform .25s cubic-bezier(.34,1.56,.64,1);overflow:hidden;max-height:90vh;overflow-y:auto}
@@ -107,35 +135,35 @@
     .modal-stat{background:var(--surface);padding:.85rem 1rem}
     .modal-stat-label{font-size:.6rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.3rem}
     .modal-stat-value{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--text)}
-
-    /* spettacoli nel modal */
-    .modal-shows{margin-bottom:1.5rem}
     .modal-shows-title{font-size:.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.18em;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
     .show-item{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border);margin-bottom:.4rem;cursor:pointer;transition:all .15s;border-radius:var(--radius)}
     .show-item:hover{border-color:var(--gold)}
+    .show-item.selected{border-color:var(--gold);background:var(--gold-dim)}
     .show-time{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--gold)}
     .show-meta{font-size:.68rem;color:var(--text-dim)}
     .show-meta span{color:var(--text-mid)}
-    .show-seats-left{font-size:.68rem;color:var(--green)}
-    .show-seats-left.low{color:var(--red)}
     .no-shows{padding:1rem;background:var(--surface);border:1px solid var(--border);font-size:.75rem;color:var(--text-dim);text-align:center;border-radius:var(--radius)}
     .no-shows-icon{font-size:1.5rem;margin-bottom:.5rem}
-
-    .btn-book{width:100%;padding:1rem;background:var(--gold);border:none;color:#0a0a0b;font-family:'DM Mono',monospace;font-size:.85rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius);transition:all .18s;display:flex;align-items:center;justify-content:center;gap:.5rem}
-    .btn-book:hover{background:#e0bc60;transform:translateY(-1px);box-shadow:0 8px 24px var(--gold-glow)}
-    .btn-book:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+    .btn-book{width:100%;padding:1rem;background:var(--gold);border:none;color:#0a0a0b;font-family:'DM Mono',monospace;font-size:.85rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius);transition:all .18s;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:1rem}
+    .btn-book:hover:not(:disabled){background:#e0bc60;transform:translateY(-1px);box-shadow:0 8px 24px var(--gold-glow)}
+    .btn-book:disabled{opacity:.4;cursor:not-allowed}
     .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,.5);border:1px solid var(--border);color:var(--text-dim);width:32px;height:32px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:2px;transition:all .15s;z-index:10}
     .modal-close:hover{border-color:var(--gold);color:var(--gold)}
 
-    /* BOOKING SCREEN */
+    /* ── BOOKING SCREEN ── */
     .booking-screen{position:fixed;inset:0;background:var(--bg);z-index:300;overflow-y:auto;transform:translateX(100%);transition:transform .35s cubic-bezier(.25,.46,.45,.94)}
     .booking-screen.open{transform:translateX(0)}
-    .booking-header{position:sticky;top:0;z-index:10;background:rgba(10,10,11,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 clamp(1.5rem,5vw,3rem);display:flex;align-items:center;gap:1rem;height:64px}
+    .booking-header{position:sticky;top:0;z-index:10;background:rgba(10,10,11,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 clamp(1.5rem,5vw,3rem);display:flex;align-items:center;justify-content:space-between;height:64px}
+    .booking-header-left{display:flex;align-items:center;gap:1rem}
     .btn-back{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'DM Mono',monospace;font-size:.75rem;padding:.4rem 1rem;cursor:pointer;border-radius:var(--radius);transition:all .15s}
     .btn-back:hover{border-color:var(--gold);color:var(--gold)}
     .booking-header-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700}
+    /* user pill in booking header */
+    .booking-user-pill{font-size:.68rem;color:var(--text-dim);padding:.3rem .7rem;border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;gap:.4rem}
+    .booking-user-pill .dot{width:5px;height:5px;border-radius:50%}
+    .booking-user-pill .dot.logged{background:var(--green)}
+    .booking-user-pill .dot.guest{background:var(--gold)}
     .booking-content{max-width:900px;margin:0 auto;padding:clamp(2rem,5vw,3rem) clamp(1.5rem,5vw,3rem) 140px}
-
     .booking-film-info{display:flex;gap:1.5rem;margin-bottom:2.5rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border)}
     .booking-film-poster{width:80px;height:110px;object-fit:cover;flex-shrink:0}
     .booking-film-poster-ph{width:80px;height:110px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0}
@@ -143,11 +171,8 @@
     .booking-film-meta{font-size:.72rem;color:var(--text-dim);margin-bottom:.3rem}
     .booking-film-meta strong{color:var(--gold)}
     .booking-show-info{margin-top:.75rem;padding:.5rem .75rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);font-size:.72rem;color:var(--text-mid);display:inline-flex;gap:1rem}
-
     .booking-section{margin-bottom:2.5rem}
     .booking-section-title{font-size:.68rem;text-transform:uppercase;letter-spacing:.18em;color:var(--text-dim);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
-
-    /* SALA */
     .hall-wrap{overflow-x:auto}
     .screen-label{text-align:center;font-size:.65rem;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.75rem}
     .screen{width:70%;margin:0 auto 2rem;height:6px;background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:50%;box-shadow:0 0 20px var(--gold-glow)}
@@ -166,8 +191,6 @@
     .legend-dot.free{background:var(--surface);border-color:var(--border)}
     .legend-dot.sel{background:var(--gold);border-color:var(--gold)}
     .legend-dot.occ{background:var(--surface2);border-color:transparent;opacity:.4}
-
-    /* SUMMARY BAR */
     .booking-summary{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,11,.97);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:1rem clamp(1.5rem,5vw,3rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;z-index:10}
     .summary-text{font-size:.72rem;color:var(--text-dim)}
     .summary-text strong{color:var(--text)}
@@ -176,33 +199,31 @@
     .btn-confirm:hover:not(:disabled){background:#e0bc60}
     .btn-confirm:disabled{opacity:.4;cursor:not-allowed}
 
-    /* QR MODAL */
+    /* ── QR MODAL ── */
     .qr-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .3s}
     .qr-backdrop.open{opacity:1;pointer-events:all}
-    .qr-modal{background:var(--surface2);border:1px solid rgba(201,168,76,.3);max-width:420px;width:100%;padding:2.5rem;text-align:center;position:relative;transform:scale(.9);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+    .qr-modal{background:var(--surface2);border:1px solid rgba(201,168,76,.3);max-width:420px;width:100%;padding:0;position:relative;transform:scale(.9);transition:transform .3s cubic-bezier(.34,1.56,.64,1);overflow:hidden}
     .qr-backdrop.open .qr-modal{transform:scale(1)}
-    .qr-accent{height:3px;background:linear-gradient(90deg,var(--gold),transparent);margin-bottom:2rem;margin:-2.5rem -2.5rem 2rem}
-    .qr-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:.5rem}
-    .qr-subtitle{font-size:.7rem;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:2rem}
-    #qrcode{display:flex;justify-content:center;margin-bottom:1.5rem}
+    .qr-accent{height:3px;background:linear-gradient(90deg,var(--gold),transparent)}
+    .qr-inner{padding:2rem;text-align:center}
+    .qr-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:.25rem}
+    .qr-subtitle{font-size:.7rem;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.5rem}
+    #qrcode{display:flex;justify-content:center;margin-bottom:1rem}
     #qrcode canvas,#qrcode img{border:8px solid #fff;border-radius:4px}
-    .qr-code-text{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--gold);letter-spacing:.15em;margin-bottom:1.5rem;word-break:break-all}
+    .qr-code-text{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--gold);letter-spacing:.12em;margin-bottom:1.5rem;word-break:break-all}
     .qr-details{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1.5rem;text-align:left}
-    .qr-detail{background:var(--surface);padding:.75rem}
-    .qr-detail-label{font-size:.58rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.25rem}
-    .qr-detail-value{font-size:.78rem;color:var(--text)}
-    .btn-qr-close{width:100%;padding:.85rem;background:var(--gold);border:none;color:#0a0a0b;font-family:'DM Mono',monospace;font-size:.8rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:var(--radius);transition:all .18s}
+    .qr-detail{background:var(--surface);padding:.65rem .85rem}
+    .qr-detail-label{font-size:.58rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.2rem}
+    .qr-detail-value{font-size:.76rem;color:var(--text)}
+    .btn-qr-close{width:100%;padding:.85rem;background:var(--gold);border:none;color:#0a0a0b;font-family:'DM Mono',monospace;font-size:.8rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .18s}
     .btn-qr-close:hover{background:#e0bc60}
 
-    /* LOADING SPINNER */
+    /* ── MISC ── */
     .booking-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem;gap:1rem;color:var(--text-dim);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase}
     .spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
-
-    /* EMPTY / ERROR */
     .empty{grid-column:1/-1;text-align:center;padding:5rem 2rem;color:var(--text-dim)}
     .empty-icon{font-size:3rem;margin-bottom:1rem;opacity:.3}
     .empty-msg{font-size:.8rem;text-transform:uppercase;letter-spacing:.15em}
-
     footer{margin-top:4rem;padding:1.5rem clamp(1.5rem,5vw,4rem);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
     footer p{font-size:.68rem;color:var(--text-dim);letter-spacing:.08em}
     footer a{color:var(--gold);text-decoration:none}
@@ -217,15 +238,19 @@
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
   <div class="logo" onclick="goHome()">🎬 CineVault <span>/ archivio</span></div>
-  <div class="header-meta">SQLite · FastAPI · Python</div>
+  <div class="header-right" id="headerRight">
+    <!-- populated by JS -->
+  </div>
 </header>
 
+<!-- HERO -->
 <section class="hero">
   <div>
     <h1 class="hero-title">Il tuo <em>archivio</em><br>cinematografico.</h1>
-    <p class="hero-sub">Esplora la collezione · Filtra · Prenota il tuo posto</p>
+    <p class="hero-sub">Esplora · Filtra · Prenota il tuo posto</p>
   </div>
   <div class="hero-stat">
     <div class="hero-stat-num" id="totalCount">—</div>
@@ -233,6 +258,7 @@
   </div>
 </section>
 
+<!-- CONTROLS -->
 <div class="controls">
   <div class="search-wrap">
     <input type="text" id="searchInput" placeholder="Cerca titolo o regista…"/>
@@ -249,6 +275,7 @@
   </select>
 </div>
 
+<!-- RESULTS BAR -->
 <div class="results-bar">
   <div class="results-count">Mostrando <strong id="shownCount">0</strong> film</div>
   <div class="view-toggle">
@@ -258,13 +285,56 @@
 </div>
 
 <main class="catalog" id="catalog"></main>
-
 <footer>
   <p>CineVault · Frontend per <a href="#">FastAPI Backend</a></p>
-  <p>GET /films · GET /film/{id} · GET /spettacoli · POST /prenota</p>
+  <p>GET /films · POST /login · POST /register · POST /prenota</p>
 </footer>
 
-<!-- MODAL FILM -->
+<!-- AUTH MODAL -->
+<div class="auth-backdrop" id="authBackdrop">
+  <div class="auth-modal">
+    <button class="auth-close" id="authClose">✕</button>
+    <div class="auth-accent"></div>
+    <div class="auth-body">
+      <div class="auth-title">Accedi</div>
+      <div class="auth-sub">Accedi per salvare le tue prenotazioni, oppure continua come ospite.</div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin">Accedi</button>
+        <button class="auth-tab" id="tabRegister">Registrati</button>
+      </div>
+      <!-- LOGIN -->
+      <div id="formLogin">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" id="loginUsername" placeholder="il tuo username"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••"/>
+        </div>
+        <div class="form-error" id="loginError"></div>
+        <button class="btn-auth" id="btnLogin">Accedi</button>
+      </div>
+      <!-- REGISTER -->
+      <div id="formRegister" style="display:none">
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input type="text" id="regUsername" placeholder="scegli un username"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="regPassword" placeholder="••••••••"/>
+        </div>
+        <div class="form-error" id="regError"></div>
+        <button class="btn-auth" id="btnRegister">Registrati</button>
+      </div>
+      <div class="auth-divider">oppure</div>
+      <button class="btn-guest" id="btnGuest">Continua come ospite 👤</button>
+    </div>
+  </div>
+</div>
+
+<!-- FILM MODAL -->
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal">
     <button class="modal-close" id="modalClose">✕</button>
@@ -282,7 +352,7 @@
         <div class="modal-shows-title">Spettacoli disponibili</div>
         <div id="modalShows"></div>
       </div>
-      <button class="btn-book" id="btnBook" disabled>🎟 Seleziona uno spettacolo per prenotare</button>
+      <button class="btn-book" id="btnBook" disabled>🎟 Seleziona uno spettacolo</button>
     </div>
   </div>
 </div>
@@ -290,8 +360,11 @@
 <!-- BOOKING SCREEN -->
 <div class="booking-screen" id="bookingScreen">
   <div class="booking-header">
-    <button class="btn-back" id="btnBack">← Torna al film</button>
-    <div class="booking-header-title">Prenotazione</div>
+    <div class="booking-header-left">
+      <button class="btn-back" id="btnBack">← Torna al film</button>
+      <div class="booking-header-title">Prenotazione</div>
+    </div>
+    <div class="booking-user-pill" id="bookingUserPill"></div>
   </div>
   <div class="booking-content">
     <div class="booking-film-info" id="bookingFilmInfo"></div>
@@ -300,9 +373,7 @@
       <div class="hall-wrap">
         <div class="screen-label">SCHERMO</div>
         <div class="screen"></div>
-        <div id="seatsContainer">
-          <div class="booking-loading"><div class="spinner"></div>Caricamento posti…</div>
-        </div>
+        <div id="seatsContainer"><div class="booking-loading"><div class="spinner"></div>Caricamento posti…</div></div>
         <div class="seat-legend">
           <div class="legend-item"><div class="legend-dot free"></div> Libero</div>
           <div class="legend-item"><div class="legend-dot sel"></div> Selezionato</div>
@@ -325,40 +396,133 @@
 <div class="qr-backdrop" id="qrBackdrop">
   <div class="qr-modal">
     <div class="qr-accent"></div>
-    <div class="qr-title">Prenotazione confermata!</div>
-    <div class="qr-subtitle">Mostra questo QR all'ingresso</div>
-    <div id="qrcode"></div>
-    <div class="qr-code-text" id="qrCodeText"></div>
-    <div class="qr-details" id="qrDetails"></div>
-    <button class="btn-qr-close" id="btnQrClose">Chiudi e torna al catalogo</button>
+    <div class="qr-inner">
+      <div class="qr-title">Prenotazione confermata!</div>
+      <div class="qr-subtitle">Mostra questo QR all'ingresso</div>
+      <div id="qrcode"></div>
+      <div class="qr-code-text" id="qrCodeText"></div>
+      <div class="qr-details" id="qrDetails"></div>
+      <button class="btn-qr-close" id="btnQrClose">Chiudi e torna al catalogo</button>
+    </div>
   </div>
 </div>
 
 <script>
-  const API_BASE = "http://127.0.0.1:8000";
+  const API_BASE = 'http://127.0.0.1:8000';
   const TICKET_PRICE = 9.50;
 
-  let DB = {};
-  let SPETTACOLI = {};
-  let activeGenre = 'all';
-  let searchQuery = '';
-  let sortMode = 'default';
-  let currentFilm = null;
-  let currentShow = null;
+  // ── STATE ─────────────────────────────────────────────────────────────────
+  let DB = {}, SPETTACOLI = {};
+  let activeGenre = 'all', searchQuery = '', sortMode = 'default';
+  let currentFilm = null, currentShow = null;
   let selectedSeats = new Set();
-  let seatsData = [];
 
-  // ── UTILS ────────────────────────────────────────────────────────────────
+  // Auth state — simple session (no JWT, just username in memory)
+  let currentUser = null; // null = not logged in, string = username, 'guest' = guest
+
+  // ── UTILS ─────────────────────────────────────────────────────────────────
   function generateCode() {
     return 'CV-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2,5).toUpperCase();
   }
-
   function formatOrario(dt) {
     const d = new Date(dt);
     return d.toLocaleString('it-IT', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
   }
 
-  // ── FETCH ────────────────────────────────────────────────────────────────
+  // ── HEADER UI ─────────────────────────────────────────────────────────────
+  function renderHeader() {
+    const right = document.getElementById('headerRight');
+    if (currentUser && currentUser !== 'guest') {
+      right.innerHTML = `
+        <div class="user-chip"><div class="dot"></div>${currentUser}</div>
+        <button class="btn-header" id="btnLogout">Esci</button>`;
+      document.getElementById('btnLogout').addEventListener('click', logout);
+    } else {
+      right.innerHTML = `
+        <button class="btn-header" id="btnOpenAuth">Accedi / Registrati</button>`;
+      document.getElementById('btnOpenAuth').addEventListener('click', openAuth);
+    }
+  }
+
+  // ── AUTH ──────────────────────────────────────────────────────────────────
+  function openAuth() {
+    document.getElementById('authBackdrop').classList.add('open');
+    document.getElementById('loginError').textContent = '';
+    document.getElementById('regError').textContent = '';
+  }
+  function closeAuth() { document.getElementById('authBackdrop').classList.remove('open'); }
+
+  document.getElementById('authClose').addEventListener('click', closeAuth);
+  document.getElementById('authBackdrop').addEventListener('click', e => { if(e.target===document.getElementById('authBackdrop')) closeAuth(); });
+
+  // Tabs
+  document.getElementById('tabLogin').addEventListener('click', () => {
+    document.getElementById('tabLogin').classList.add('active');
+    document.getElementById('tabRegister').classList.remove('active');
+    document.getElementById('formLogin').style.display = '';
+    document.getElementById('formRegister').style.display = 'none';
+  });
+  document.getElementById('tabRegister').addEventListener('click', () => {
+    document.getElementById('tabRegister').classList.add('active');
+    document.getElementById('tabLogin').classList.remove('active');
+    document.getElementById('formRegister').style.display = '';
+    document.getElementById('formLogin').style.display = 'none';
+  });
+
+  // Login
+  document.getElementById('btnLogin').addEventListener('click', async () => {
+    const username = document.getElementById('loginUsername').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const errEl = document.getElementById('loginError');
+    if (!username || !password) { errEl.textContent = 'Compila tutti i campi.'; return; }
+    try {
+      const res = await fetch(`${API_BASE}/login`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ username, password })
+      });
+      if (!res.ok) { const e = await res.json(); errEl.textContent = e.detail; return; }
+      currentUser = username;
+      closeAuth();
+      renderHeader();
+      // if coming from booking flow, continue
+      if (pendingBooking) { pendingBooking = false; openBooking(); }
+    } catch { errEl.textContent = 'Errore di connessione.'; }
+  });
+
+  // Register
+  document.getElementById('btnRegister').addEventListener('click', async () => {
+    const username = document.getElementById('regUsername').value.trim();
+    const password = document.getElementById('regPassword').value;
+    const errEl = document.getElementById('regError');
+    if (!username || !password) { errEl.textContent = 'Compila tutti i campi.'; return; }
+    try {
+      const res = await fetch(`${API_BASE}/register`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ username, password })
+      });
+      if (!res.ok) { const e = await res.json(); errEl.textContent = e.detail; return; }
+      // Auto-login after register
+      currentUser = username;
+      closeAuth();
+      renderHeader();
+      if (pendingBooking) { pendingBooking = false; openBooking(); }
+    } catch { errEl.textContent = 'Errore di connessione.'; }
+  });
+
+  // Guest
+  document.getElementById('btnGuest').addEventListener('click', () => {
+    currentUser = 'guest';
+    closeAuth();
+    renderHeader();
+    if (pendingBooking) { pendingBooking = false; openBooking(); }
+  });
+
+  function logout() {
+    currentUser = null;
+    renderHeader();
+  }
+
+  // ── FETCH DATA ────────────────────────────────────────────────────────────
   async function loadAll() {
     showLoading();
     try {
@@ -366,25 +530,23 @@
         fetch(`${API_BASE}/films`),
         fetch(`${API_BASE}/spettacoli`)
       ]);
-      if (!filmsRes.ok) throw new Error('Films fetch failed');
+      if (!filmsRes.ok) throw new Error();
       DB = await filmsRes.json();
       if (showsRes.ok) SPETTACOLI = await showsRes.json();
       document.getElementById('totalCount').textContent = Object.keys(DB).length;
       buildGenreFilters();
       render();
-    } catch(err) {
-      showError(); console.error(err);
-    }
+    } catch { showError(); }
   }
 
   function showLoading() {
-    document.getElementById('catalog').innerHTML = `<div class="empty"><div class="empty-icon" style="animation:spin 1s linear infinite;display:inline-block">⟳</div><div class="empty-msg" style="margin-top:1rem">Caricamento dal backend…</div></div>`;
+    document.getElementById('catalog').innerHTML = `<div class="empty"><div class="empty-icon" style="animation:spin 1s linear infinite;display:inline-block">⟳</div><div class="empty-msg" style="margin-top:1rem">Caricamento…</div></div>`;
   }
   function showError() {
     document.getElementById('catalog').innerHTML = `<div class="empty"><div class="empty-icon">⚠</div><div class="empty-msg">Impossibile connettersi al backend</div><div style="margin-top:1rem;font-size:.7rem;color:var(--text-dim)">Assicurati che FastAPI giri su <strong style="color:var(--gold)">${API_BASE}</strong></div></div>`;
   }
 
-  // ── GENRE FILTERS ────────────────────────────────────────────────────────
+  // ── GENRE FILTERS ─────────────────────────────────────────────────────────
   function buildGenreFilters() {
     const genres = [...new Set(Object.values(DB).map(f => f.Genere))].sort();
     const container = document.getElementById('genreFilters');
@@ -406,12 +568,11 @@
   document.getElementById('gridBtn').addEventListener('click', () => { document.getElementById('gridBtn').classList.add('active'); document.getElementById('listBtn').classList.remove('active'); document.getElementById('catalog').classList.remove('list-view'); });
   document.getElementById('listBtn').addEventListener('click', () => { document.getElementById('listBtn').classList.add('active'); document.getElementById('gridBtn').classList.remove('active'); document.getElementById('catalog').classList.add('list-view'); });
 
-  // ── SPETTACOLI HELPERS ───────────────────────────────────────────────────
+  // ── RENDER ────────────────────────────────────────────────────────────────
   function getShowsForFilm(filmId) {
-    return Object.entries(SPETTACOLI).filter(([, s]) => String(s.Film) === String(filmId));
+    return Object.entries(SPETTACOLI).filter(([,s]) => String(s.Film)===String(filmId));
   }
 
-  // ── RENDER ───────────────────────────────────────────────────────────────
   function render() {
     let entries = Object.entries(DB);
     if (activeGenre !== 'all') entries = entries.filter(([,f]) => f.Genere===activeGenre);
@@ -435,7 +596,7 @@
         : `<div class="card-poster-placeholder">🎬</div>`;
       card.innerHTML = `
         ${posterHTML}
-        ${hasShow ? `<div class="badge-cinema">In sala</div>` : ''}
+        ${hasShow?`<div class="badge-cinema">In sala</div>`:''}
         <div class="card-content">
           <div class="card-title">${film.Titolo}</div>
           <div class="card-director">di <strong>${film.Regista}</strong></div>
@@ -450,7 +611,7 @@
     });
   }
 
-  // ── MODAL ────────────────────────────────────────────────────────────────
+  // ── FILM MODAL ────────────────────────────────────────────────────────────
   function openModal(id, film) {
     currentFilm = { id, ...film };
     currentShow = null;
@@ -465,12 +626,11 @@
     document.getElementById('modalGenre').textContent = film.Genere;
     document.getElementById('modalDuration').textContent = `${film.Durata} min`;
 
-    // Spettacoli
     const shows = getShowsForFilm(id);
     const showsContainer = document.getElementById('modalShows');
     const btnBook = document.getElementById('btnBook');
     btnBook.disabled = true;
-    btnBook.textContent = '🎟 Seleziona uno spettacolo per prenotare';
+    btnBook.textContent = '🎟 Seleziona uno spettacolo';
 
     if (!shows.length) {
       showsContainer.innerHTML = `<div class="no-shows"><div class="no-shows-icon">🚫</div>Questo film non è attualmente in programmazione.</div>`;
@@ -484,12 +644,10 @@
             <div class="show-time">${formatOrario(show.Orario)}</div>
             <div class="show-meta">Sala <span>${show.Sala}</span></div>
           </div>
-          <div class="show-seats-left ${show.PostiDisponibili < 5 ? 'low' : ''}">
-            🪑 Posti disponibili
-          </div>`;
+          <div style="font-size:.68rem;color:var(--green)">🪑 Disponibile</div>`;
         item.addEventListener('click', () => {
-          showsContainer.querySelectorAll('.show-item').forEach(el => el.style.borderColor='');
-          item.style.borderColor = 'var(--gold)';
+          showsContainer.querySelectorAll('.show-item').forEach(el => el.classList.remove('selected'));
+          item.classList.add('selected');
           currentShow = { id: showId, ...show };
           btnBook.disabled = false;
           btnBook.textContent = '🎟 Prenota questo spettacolo';
@@ -497,26 +655,43 @@
         showsContainer.appendChild(item);
       });
     }
-
     document.getElementById('modalBackdrop').classList.add('open');
   }
 
   function closeModal() { document.getElementById('modalBackdrop').classList.remove('open'); }
   document.getElementById('modalClose').addEventListener('click', closeModal);
   document.getElementById('modalBackdrop').addEventListener('click', e => { if(e.target===document.getElementById('modalBackdrop')) closeModal(); });
-  document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeModal(); } });
 
-  // ── BOOKING ──────────────────────────────────────────────────────────────
-  document.getElementById('btnBook').addEventListener('click', openBooking);
+  // ── BOOKING FLOW ──────────────────────────────────────────────────────────
+  let pendingBooking = false;
+
+  document.getElementById('btnBook').addEventListener('click', () => {
+    if (!currentUser) {
+      // Non loggato → apri auth, poi torna al booking
+      pendingBooking = true;
+      closeModal();
+      openAuth();
+    } else {
+      openBooking();
+    }
+  });
+
   document.getElementById('btnBack').addEventListener('click', closeBooking);
 
   async function openBooking() {
     closeModal();
     selectedSeats.clear();
-    const f = currentFilm;
-    const s = currentShow;
+    const f = currentFilm, s = currentShow;
 
-    // Film info strip
+    // Pill utente in header booking
+    const pill = document.getElementById('bookingUserPill');
+    if (currentUser === 'guest') {
+      pill.innerHTML = `<div class="dot guest"></div> Ospite`;
+    } else {
+      pill.innerHTML = `<div class="dot logged"></div> ${currentUser}`;
+    }
+
+    // Film info
     document.getElementById('bookingFilmInfo').innerHTML = `
       ${f.Immagine?`<img class="booking-film-poster" src="${f.Immagine}" alt="${f.Titolo}" onerror="this.outerHTML='<div class=booking-film-poster-ph>🎬</div>'">`:`<div class="booking-film-poster-ph">🎬</div>`}
       <div>
@@ -531,94 +706,74 @@
 
     updateSummary();
     document.getElementById('bookingScreen').classList.add('open');
-
-    // Carica posti reali dal backend
     await loadSeats(s.Sala);
   }
+
+  function closeBooking() { document.getElementById('bookingScreen').classList.remove('open'); }
 
   async function loadSeats(salaId) {
     const container = document.getElementById('seatsContainer');
     container.innerHTML = `<div class="booking-loading"><div class="spinner"></div>Caricamento posti…</div>`;
     try {
       const res = await fetch(`${API_BASE}/sala/${salaId}/posti`);
-      if (!res.ok) throw new Error('Posti non trovati');
+      if (!res.ok) throw new Error();
       const data = await res.json();
-      seatsData = Object.values(data);
-      buildSeats(seatsData);
-    } catch(err) {
+      buildSeats(Object.values(data));
+    } catch {
       container.innerHTML = `<div class="booking-loading">⚠ Impossibile caricare i posti</div>`;
-      console.error(err);
     }
   }
 
   function buildSeats(posti) {
-    // Raggruppa per fila
     const rows = {};
-    posti.forEach(p => {
-      if (!rows[p.Fila]) rows[p.Fila] = [];
-      rows[p.Fila].push(p);
-    });
-    Object.values(rows).forEach(r => r.sort((a,b) => a.NumeroPosto - b.NumeroPosto));
+    posti.forEach(p => { if(!rows[p.Fila]) rows[p.Fila]=[]; rows[p.Fila].push(p); });
+    Object.values(rows).forEach(r => r.sort((a,b) => a.NumeroPosto-b.NumeroPosto));
 
     const container = document.getElementById('seatsContainer');
-    const grid = document.createElement('div');
-    grid.className = 'seats-grid';
-
+    const grid = document.createElement('div'); grid.className='seats-grid';
     const rowKeys = Object.keys(rows).sort();
     const maxCols = Math.max(...rowKeys.map(r => rows[r].length));
-    const aisleAfter = Math.floor(maxCols / 2);
+    const aisleAfter = Math.floor(maxCols/2);
 
     rowKeys.forEach(rowKey => {
-      const rowEl = document.createElement('div');
-      rowEl.className = 'seats-row';
-      const lbl = document.createElement('div');
-      lbl.className = 'row-label'; lbl.textContent = rowKey;
+      const rowEl = document.createElement('div'); rowEl.className='seats-row';
+      const lbl = document.createElement('div'); lbl.className='row-label'; lbl.textContent=rowKey;
       rowEl.appendChild(lbl);
-
-      rows[rowKey].forEach((posto, idx) => {
-        if (idx === aisleAfter) {
-          const aisle = document.createElement('div');
-          aisle.className = 'seat-aisle';
-          rowEl.appendChild(aisle);
-        }
-        const seatId = `${posto.Fila}${posto.NumeroPosto}`;
-        const seat = document.createElement('div');
-        seat.className = 'seat' + (posto.Stato === 1 ? ' occupied' : '');
-        seat.title = seatId;
-        seat.addEventListener('click', () => toggleSeat(seat, seatId, posto.Stato));
+      rows[rowKey].forEach((posto,idx) => {
+        if(idx===aisleAfter){ const a=document.createElement('div'); a.className='seat-aisle'; rowEl.appendChild(a); }
+        const sid=`${posto.Fila}${posto.NumeroPosto}`;
+        const seat=document.createElement('div');
+        seat.className='seat'+(posto.Stato===1?' occupied':'');
+        seat.title=sid;
+        seat.addEventListener('click', () => toggleSeat(seat,sid,posto.Stato));
         rowEl.appendChild(seat);
       });
-
       grid.appendChild(rowEl);
     });
-
-    container.innerHTML = '';
-    container.appendChild(grid);
+    container.innerHTML=''; container.appendChild(grid);
   }
 
-  function toggleSeat(el, id, stato) {
-    if (stato === 1) return;
-    if (selectedSeats.has(id)) { selectedSeats.delete(id); el.classList.remove('selected'); }
-    else { selectedSeats.add(id); el.classList.add('selected'); }
+  function toggleSeat(el,id,stato) {
+    if(stato===1) return;
+    if(selectedSeats.has(id)){ selectedSeats.delete(id); el.classList.remove('selected'); }
+    else{ selectedSeats.add(id); el.classList.add('selected'); }
     updateSummary();
   }
 
   function updateSummary() {
-    const n = selectedSeats.size;
-    document.getElementById('summarySeats').textContent = n>0 ? [...selectedSeats].sort().join(', ') : '—';
-    document.getElementById('summaryPrice').textContent = n>0 ? `€ ${(n*TICKET_PRICE).toFixed(2)}` : '';
-    document.getElementById('summaryInfo').textContent = currentShow ? `${formatOrario(currentShow.Orario)} · Sala ${currentShow.Sala}` : '';
-    document.getElementById('btnConfirm').disabled = n === 0;
+    const n=selectedSeats.size;
+    document.getElementById('summarySeats').textContent = n>0?[...selectedSeats].sort().join(', '):'—';
+    document.getElementById('summaryPrice').textContent = n>0?`€ ${(n*TICKET_PRICE).toFixed(2)}`:'';
+    document.getElementById('summaryInfo').textContent = currentShow?`${formatOrario(currentShow.Orario)} · Sala ${currentShow.Sala}`:'';
+    document.getElementById('btnConfirm').disabled = n===0;
   }
 
-  function closeBooking() { document.getElementById('bookingScreen').classList.remove('open'); }
-
-  // ── CONFERMA & QR ────────────────────────────────────────────────────────
+  // ── CONFERMA & QR ─────────────────────────────────────────────────────────
   document.getElementById('btnConfirm').addEventListener('click', async () => {
     const code = generateCode();
     const posti = [...selectedSeats].sort().join(',');
     const n = selectedSeats.size;
-    const costo = Math.round(n * TICKET_PRICE);
+    const costo = Math.round(n*TICKET_PRICE);
 
     const body = {
       SpettacoloId: parseInt(currentShow.id),
@@ -626,48 +781,39 @@
       SpecialCode: code,
       costoTotale: costo,
       numeroPostiPrenotati: n,
-      Posti: posti
+      Posti: posti,
+      // Includi username se loggato, null se ospite
+      User: (currentUser && currentUser !== 'guest') ? currentUser : '-1'
     };
 
     try {
       const res = await fetch(`${API_BASE}/prenota`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify(body)
       });
-      if (!res.ok) {
-        const err = await res.json();
-        alert('Errore: ' + (err.detail || 'Prenotazione fallita'));
-        return;
-      }
+      if(!res.ok){ const e=await res.json(); alert('Errore: '+(e.detail||'Prenotazione fallita')); return; }
       closeBooking();
       showQR(code, posti, n, costo);
-    } catch(err) {
-      alert('Errore di connessione al backend.');
-      console.error(err);
-    }
+    } catch { alert('Errore di connessione al backend.'); }
   });
 
   function showQR(code, posti, n, costo) {
     document.getElementById('qrCodeText').textContent = code;
+    const userRow = (currentUser && currentUser !== 'guest')
+      ? `<div class="qr-detail"><div class="qr-detail-label">Utente</div><div class="qr-detail-value">${currentUser}</div></div>`
+      : `<div class="qr-detail"><div class="qr-detail-label">Modalità</div><div class="qr-detail-value">Ospite</div></div>`;
     document.getElementById('qrDetails').innerHTML = `
       <div class="qr-detail"><div class="qr-detail-label">Film</div><div class="qr-detail-value">${currentFilm.Titolo}</div></div>
       <div class="qr-detail"><div class="qr-detail-label">Orario</div><div class="qr-detail-value">${formatOrario(currentShow.Orario)}</div></div>
       <div class="qr-detail"><div class="qr-detail-label">Sala</div><div class="qr-detail-value">${currentShow.Sala}</div></div>
       <div class="qr-detail"><div class="qr-detail-label">Posti</div><div class="qr-detail-value">${posti}</div></div>
       <div class="qr-detail"><div class="qr-detail-label">Biglietti</div><div class="qr-detail-value">${n}</div></div>
-      <div class="qr-detail"><div class="qr-detail-label">Totale</div><div class="qr-detail-value">€ ${costo.toFixed(2)}</div></div>`;
+      <div class="qr-detail"><div class="qr-detail-label">Totale</div><div class="qr-detail-value">€ ${costo.toFixed(2)}</div></div>
+      ${userRow}`;
 
-    // Genera QR
     const qrEl = document.getElementById('qrcode');
-    qrEl.innerHTML = '';
-    new QRCode(qrEl, {
-      text: code,
-      width: 180, height: 180,
-      colorDark: '#0a0a0b',
-      colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.H
-    });
+    qrEl.innerHTML='';
+    new QRCode(qrEl, { text:code, width:180, height:180, colorDark:'#0a0a0b', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.H });
 
     document.getElementById('qrBackdrop').classList.add('open');
   }
@@ -675,12 +821,13 @@
   document.getElementById('btnQrClose').addEventListener('click', () => {
     document.getElementById('qrBackdrop').classList.remove('open');
     selectedSeats.clear();
-    loadAll(); // ricarica per aggiornare posti disponibili
+    loadAll();
   });
 
-  function goHome() { closeBooking(); closeModal(); window.scrollTo({ top:0, behavior:'smooth' }); }
+  function goHome() { closeBooking(); closeModal(); window.scrollTo({top:0,behavior:'smooth'}); }
 
-  // ── START ────────────────────────────────────────────────────────────────
+  // ── START ─────────────────────────────────────────────────────────────────
+  renderHeader();
   loadAll();
 </script>
 </body>
